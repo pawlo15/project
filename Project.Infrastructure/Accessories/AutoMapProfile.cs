@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Project.Infrastructure.DTOs.Client;
+using Project.Infrastructure.Models.Client;
 
 namespace Project.Infrastructure.Accessories
 {
@@ -6,7 +8,8 @@ namespace Project.Infrastructure.Accessories
     {
         public AutoMapProfile() 
         { 
-
+            CreateMap<Client?,GetClientDto>();
+            CreateMap<Address?,GetAddressDto>();
         }
     }
 }

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -26,10 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Functions\Command\" />
     <Folder Include="Functions\Validators\" />
-    <Folder Include="Functions\Query\" />
     <Folder Include="Migrations\" />
+    <Folder Include="Exceptions\" />
   </ItemGroup>
 
 </Project>

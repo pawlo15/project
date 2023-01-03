@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Project.Infrastructure.Data;
+using Project.Infrastructure.Models.Client;
 using Project.Infrastructure.Services.Interfaces.Base;
 
 namespace Project.Infrastructure.Services.Repositories.Base
@@ -9,6 +10,9 @@ namespace Project.Infrastructure.Services.Repositories.Base
         private readonly IConfiguration _configuration;
         private readonly DataContext _dataContext;
         private IAuthenticationService _authenticationService;
+        private GenericRepository<Client> _clientRepository;
+        private GenericRepository<Address> _addressRepository;
+        private AccountRepository _accountRepository;
         public UnitOfWork(IConfiguration configuration, DataContext dataContext)
         {
             _configuration = configuration;
@@ -20,6 +24,31 @@ namespace Project.Infrastructure.Services.Repositories.Base
             {
                 _authenticationService ??= new AuthenticationService(_dataContext, _configuration);
                 return _authenticationService;
+            }
+        }
+
+        public GenericRepository<Client> ClientRepository
+        {
+            get
+            {
+                _clientRepository ??= new GenericRepository<Client>(_dataContext);
+                return _clientRepository;
+            }
+        }
+        public GenericRepository<Address> AddressRepository 
+        {
+            get
+            {
+                _addressRepository ??= new GenericRepository<Address>(_dataContext);
+                return _addressRepository;
+            }
+        }
+        public AccountRepository AccountRepository
+        {
+            get
+            {
+                _accountRepository ??= new AccountRepository(_dataContext);
+                return _accountRepository;
             }
         }
 

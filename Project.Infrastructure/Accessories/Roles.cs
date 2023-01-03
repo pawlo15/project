@@ -2,8 +2,8 @@
 {
     public enum Roles
     {
-        Administrator,
+        Client = 1,
         Moderator,
-        User
+        Admin
     }
 }

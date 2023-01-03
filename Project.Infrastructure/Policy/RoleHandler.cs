@@ -8,6 +8,7 @@ namespace Project.Infrastructure.Policy
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, RoleRequirement requirement)
         {
             var userRoleClaim = context.User.FindAll(r => r.Type == ClaimTypes.Role);
+
             if (userRoleClaim is null)
                 return Task.CompletedTask;
 

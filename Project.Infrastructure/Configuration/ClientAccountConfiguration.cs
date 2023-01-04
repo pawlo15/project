@@ -8,25 +8,22 @@ namespace Project.Infrastructure.Configuration
     {
         public void Configure(EntityTypeBuilder<ClientAccount> builder)
         {
+            builder.HasKey(ca => new { ca.AccountId, ca.ClientId });
+
             builder.Property(p => p.AccountId)
-                .IsRequired()
                 .HasColumnType("int");
 
             builder.Property(p => p.ClientId)
-                .IsRequired()
                 .HasColumnType("int");
 
-            builder.HasKey(p => new { p.AccountId, p.ClientId });
+            builder.HasOne(ca => ca.Client)
+                .WithMany(c => c.Accounts)
+                .HasForeignKey(ca => ca.ClientId);
 
-            builder.HasOne(p => p.Account)
-                .WithMany(p => p.Clients)
-                .HasForeignKey(p => p.ClientId);
-
-            builder.HasOne(p => p.Client)
-                .WithMany(p => p.Accounts)
-                .HasForeignKey(p => p.AccountId);
+            builder.HasOne(ca => ca.Account)
+                .WithMany(a => a.Clients)
+                .HasForeignKey(ca => ca.AccountId);
                 
-
         }
     }
 }

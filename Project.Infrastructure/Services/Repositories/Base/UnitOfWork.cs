@@ -13,6 +13,7 @@ namespace Project.Infrastructure.Services.Repositories.Base
         private GenericRepository<Client> _clientRepository;
         private GenericRepository<Address> _addressRepository;
         private AccountRepository _accountRepository;
+        private ClientAccountRepository _clientAccountRepository;
         public UnitOfWork(IConfiguration configuration, DataContext dataContext)
         {
             _configuration = configuration;
@@ -51,7 +52,14 @@ namespace Project.Infrastructure.Services.Repositories.Base
                 return _accountRepository;
             }
         }
-
+        public ClientAccountRepository ClientAccountRepository
+        {
+            get
+            {
+                _clientAccountRepository ??= new ClientAccountRepository(_dataContext);
+                return _clientAccountRepository;    
+            }
+        }
         public async Task Save()
         {
             await _dataContext.SaveChangesAsync();

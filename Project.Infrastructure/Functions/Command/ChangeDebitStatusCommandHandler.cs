@@ -1,18 +1,28 @@
 ﻿using MediatR;
 using Project.Infrastructure.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Project.Infrastructure.Services.Interfaces.Base;
 
 namespace Project.Infrastructure.Functions.Command
 {
-    public class ChangeDebitStatusCommandHandler : IRequestHandler<ChangeAccountStatusCommand, ServiceResponse<string>>
+    public class ChangeDebitStatusCommandHandler : IRequestHandler<ChangeDebitStatusCommand, ServiceResponse<string>>
     {
-        public Task<ServiceResponse<string>> Handle(ChangeAccountStatusCommand request, CancellationToken cancellationToken)
+        private readonly IUnitOfWork _unitOfWork;
+        public ChangeDebitStatusCommandHandler(IUnitOfWork unitOfWork)
         {
-            throw new NotImplementedException();
+            _unitOfWork = unitOfWork;
+        }
+
+        public async Task<ServiceResponse<string>> Handle(ChangeDebitStatusCommand request, CancellationToken cancellationToken)
+        {
+            short status;
+            if (request.active)
+                status = 1;
+            else
+                status = 0;
+
+            await _unitOfWork.AccountRepository.ChangeDebitStatus(request.accountId, status);
+
+            return new ServiceResponse<string>();
         }
     }
 }

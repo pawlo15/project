@@ -10,6 +10,7 @@ namespace Project.Infrastructure.Services.Interfaces.Base
         public GenericRepository<Client> ClientRepository { get; }
         public GenericRepository<Address> AddressRepository { get; }
         public AccountRepository AccountRepository { get; }
+        public ClientAccountRepository ClientAccountRepository { get; }
         public Task Save();
     }
 }

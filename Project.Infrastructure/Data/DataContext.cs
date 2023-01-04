@@ -20,5 +20,6 @@ namespace Project.Infrastructure.Data
         public DbSet<Client> Clients { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Account> Accounts { get; set; }
+        public DbSet<ClientAccount> ClientAccount { get; set; }
     }
 }

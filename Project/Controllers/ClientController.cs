@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Project.Infrastructure.DTOs.Client;
 using Project.Infrastructure.Functions.Command;
 using Project.Infrastructure.Functions.Query;
 using Project.Infrastructure.Models;
@@ -22,20 +21,16 @@ namespace Project.Controllers
 
         [Authorize(Policy = "AccessForLogClient")]
         [HttpGet("GetClient")]
-        public async Task<ActionResult<ServiceResponse<Client>>> GetClient(int id)
+        public async Task<ActionResult<ServiceResponse<Client>>> GetClient(GetClientQuery query)
         {
-            var query = new GetClientQuery();
-            query.Id = id;
             var result = await _mediator.Send(query);
             return Ok(result);
         }
 
         [Authorize(Policy = "AccessForLogClient")]
         [HttpGet("GetAllAccounts")]
-        public async Task<ActionResult<ServiceResponse<List<Account>>>> GetAllAccounts(int id)
+        public async Task<ActionResult<ServiceResponse<List<Account>>>> GetAllAccounts(GetAccountsQuery query)
         {
-            var query = new GetAccountsQuery();
-            query.ClientId = id;
             var result = await _mediator.Send(query);
             return Ok(result);
         }
@@ -51,9 +46,8 @@ namespace Project.Controllers
 
         [Authorize(Policy = "AccessForLogClient")]
         [HttpPost("Transfer")]
-        public async Task<ActionResult<ServiceResponse<string>>> Transfer()
+        public async Task<ActionResult<ServiceResponse<string>>> Transfer(TransferCommand command)
         {
-            var command = new TransferCommand();
             var result = await _mediator.Send(command);
             return Ok(result);
         }

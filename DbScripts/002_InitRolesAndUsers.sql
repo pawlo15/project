@@ -3,5 +3,3 @@
 
   "login": "administrator",
   "password": "Administrator1234!@#$"
-
-  

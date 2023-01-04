@@ -1,13 +1,28 @@
 ﻿using MediatR;
 using Project.Infrastructure.Models;
+using Project.Infrastructure.Services.Interfaces.Base;
 
 namespace Project.Infrastructure.Functions.Command
 {
     public class ChangeAccountStatusCommandHandler : IRequestHandler<ChangeAccountStatusCommand, ServiceResponse<string>>
     {
-        public Task<ServiceResponse<string>> Handle(ChangeAccountStatusCommand request, CancellationToken cancellationToken)
+        private readonly IUnitOfWork _unitOfWork;
+        public ChangeAccountStatusCommandHandler(IUnitOfWork unitOfWork)
         {
-            throw new NotImplementedException();
+            _unitOfWork = unitOfWork;
+        }
+
+        public async Task<ServiceResponse<string>> Handle(ChangeAccountStatusCommand request, CancellationToken cancellationToken)
+        {
+            short status;
+            if (request.active)
+                status = 1;
+            else
+                status = 0;
+
+            await _unitOfWork.AccountRepository.ChangeAccountStatus(request.accountId, status);
+
+            return new ServiceResponse<string>();
         }
     }
 }

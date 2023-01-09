@@ -16,10 +16,9 @@ namespace Project.Infrastructure.Functions.Query
         }
         public async Task<GetClientDto> Handle(GetClientQuery request, CancellationToken cancellationToken)
         {
-            var response = new GetClientDto();
             var client = await _unitOfWork.ClientRepository.Get(request.Id);
             var address = await _unitOfWork.AddressRepository.Get(request.Id);
-            response = _mapper.Map<GetClientDto>(client);
+            GetClientDto? response = _mapper.Map<GetClientDto>(client);
             response.Address = _mapper.Map<GetAddressDto>(address);
             return response;
         }

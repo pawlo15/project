@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
 using Project.Infrastructure.DTOs.Account;
-using Project.Infrastructure.Models.Client;
 using Project.Infrastructure.Services.Interfaces.Base;
 
 namespace Project.Infrastructure.Functions.Query

@@ -5,7 +5,7 @@ namespace Project.Infrastructure.Functions.Command
 {
     public class ChangeDebitStatusCommand : IRequest<ServiceResponse<string>>
     {
-        public bool active { get; set; }
-        public int accountId { get; set; }
+        public bool Active { get; set; }
+        public int AccountId { get; set; }
     }
 }

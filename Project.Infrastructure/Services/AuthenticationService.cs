@@ -2,7 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Project.Infrastructure.Data;
+using Project.Infrastructure.Exceptions;
 using Project.Infrastructure.Models;
+using Project.Infrastructure.Accessories;
 using Project.Infrastructure.Models.User;
 using Project.Infrastructure.Services.Interfaces.Base;
 using System.IdentityModel.Tokens.Jwt;
@@ -28,10 +30,10 @@ namespace Project.Infrastructure.Services
                 .FirstOrDefaultAsync(u => u.Login.ToLower().Equals(username.ToLower()));
 
             if (user == default)
-                throw new Exception(); // do zrobienia exception handler
+                throw new AuthorizeException(ErrorCode.ERR001);
 
             else if (!Veryfication(password, user.PasswordHash, user.PasswordSalt))
-                throw new Exception(); // do zrobienia exception handler
+                throw new AuthorizeException(ErrorCode.ERR001);
 
             else
                 response.Data = CreateToken(user);
@@ -44,10 +46,7 @@ namespace Project.Infrastructure.Services
             var response = new ServiceResponse<int>();
 
             if (await UserExists(user.Login))
-            {
-                response.Message = "Login nie spełnia wymagań";
-                return response;
-            }
+                throw new UserRegisterException(ErrorCode.ERR002);
 
             CreatePassword(password, out byte[] passwordHash, out byte[] passwordSalt);
             user.PasswordHash = passwordHash;

@@ -4,7 +4,7 @@ namespace Project.Infrastructure.Functions.Command
 {
     public class DeleteClientFromAccountCommand : IRequest<bool>
     {
-        public int clientId { get; set; }
-        public int accountId { get; set; }
+        public int ClientId { get; set; }
+        public int AccountId { get; set; }
     }
 }

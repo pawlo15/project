@@ -5,8 +5,9 @@ namespace Project.Infrastructure.Functions.Command
 {
     public class TransferCommand : IRequest<ServiceResponse<string>>
     {
-        public string accountSender { get; set; }
-        public string accountReceiver { get; set; }
-        public decimal amount { get; set; }
+        public int ClientId { get; set; }
+        public string AccountSender { get; set; }
+        public string AccountReceiver { get; set; }
+        public decimal Amount { get; set; }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Project.Infrastructure.Models;
 using Project.Infrastructure.Models.Client;
 
 namespace Project.Infrastructure.Functions.Command

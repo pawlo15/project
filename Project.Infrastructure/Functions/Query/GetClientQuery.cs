@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Project.Infrastructure.DTOs.Client;
-using Project.Infrastructure.Models.Client;
 
 namespace Project.Infrastructure.Functions.Query
 {

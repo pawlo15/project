@@ -15,12 +15,12 @@ namespace Project.Infrastructure.Functions.Command
         public async Task<ServiceResponse<string>> Handle(ChangeAccountStatusCommand request, CancellationToken cancellationToken)
         {
             short status;
-            if (request.active)
+            if (request.Active)
                 status = 1;
             else
                 status = 0;
 
-            await _unitOfWork.AccountRepository.ChangeAccountStatus(request.accountId, status);
+            await _unitOfWork.AccountRepository.ChangeAccountStatus(request.AccountId, status);
 
             return new ServiceResponse<string>();
         }

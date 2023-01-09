@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using Project.Infrastructure.Accessories;
+using Project.Infrastructure.Exceptions;
 using Project.Infrastructure.Models;
 using Project.Infrastructure.Services.Interfaces.Base;
 
@@ -14,25 +16,28 @@ namespace Project.Infrastructure.Functions.Command
 
         public async Task<ServiceResponse<string>> Handle(TransferCommand request, CancellationToken cancellationToken)
         {
-            if (request.amount <= 0)
-                return new ServiceResponse<string>();
+            if (request.Amount <= 0)
+                throw new WrongTransferAmountException(ErrorCode.ERR003);
 
-            var sender = await _unitOfWork.AccountRepository.GetAccountByAccountNumber(request.accountSender);
-           
-            if((sender == default) || (sender.IsActive == 0))
-                return new ServiceResponse<string>();
+            var sender = await _unitOfWork.AccountRepository.GetAccountByAccountNumber(request.AccountSender);
+            sender.Clients = await _unitOfWork.ClientAccountRepository.GetAllAccountUsers(sender.Id);
 
-            if((sender.Balance-request.amount>=0) || ((sender.HasDebit == 1) && (sender.DebitBalance+sender.Balance)-request.amount >=0))
+            if (sender.Clients.Any(c => c.ClientId == request.ClientId))
             {
-                var receiver = await _unitOfWork.AccountRepository.GetAccountByAccountNumber(request.accountReceiver);
+                if ((sender == default) || (sender.IsActive == 0))
+                    throw new NoActiveAccountException(ErrorCode.ERR004);
 
-                sender.Balance -= request.amount;
-                receiver.Balance += request.amount;
+                if ((sender.Balance - request.Amount >= 0) || ((sender.HasDebit == 1) && (sender.DebitBalance + sender.Balance) - request.Amount >= 0))
+                {
+                    var receiver = await _unitOfWork.AccountRepository.GetAccountByAccountNumber(request.AccountReceiver);
 
-                await _unitOfWork.AccountRepository.Update(receiver);
-                await _unitOfWork.AccountRepository.Update(sender);
+                    sender.Balance -= request.Amount;
+                    receiver.Balance += request.Amount;
+
+                    await _unitOfWork.AccountRepository.Update(receiver);
+                    await _unitOfWork.AccountRepository.Update(sender);
+                }
             }
-
             return new ServiceResponse<string>();
         }
     }

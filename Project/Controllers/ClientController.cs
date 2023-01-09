@@ -1,10 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Project.Infrastructure.DTOs.Account;
+using Project.Infrastructure.DTOs.Client;
 using Project.Infrastructure.Functions.Command;
 using Project.Infrastructure.Functions.Query;
 using Project.Infrastructure.Models;
-using Project.Infrastructure.Models.Client;
+using System.Security.Claims;
 
 namespace Project.Controllers
 {
@@ -21,18 +23,33 @@ namespace Project.Controllers
 
         [Authorize(Policy = "AccessForLogClient")]
         [HttpGet("GetClient")]
-        public async Task<ActionResult<ServiceResponse<Client>>> GetClient(GetClientQuery query)
+        public async Task<ActionResult<ServiceResponse<GetClientDto>>> GetClient()
         {
+            System.Security.Claims.ClaimsIdentity id = User.Identities.First();
+
+            var query = new GetClientQuery { 
+                Id = Convert.ToInt32(id.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value) 
+            };
+
             var result = await _mediator.Send(query);
-            return Ok(result);
+
+            return Ok(new ServiceResponse<GetClientDto> { Data = result});
+
         }
 
         [Authorize(Policy = "AccessForLogClient")]
         [HttpGet("GetAllAccounts")]
-        public async Task<ActionResult<ServiceResponse<List<Account>>>> GetAllAccounts(GetAccountsQuery query)
+        public async Task<ActionResult<ServiceResponse<IReadOnlyCollection<GetAccountDto>>>> GetAllAccounts()
         {
+            System.Security.Claims.ClaimsIdentity id = User.Identities.First();
+
+            var query = new GetAccountsQuery { 
+                ClientId = Convert.ToInt32(id.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value)
+            };
+
             var result = await _mediator.Send(query);
-            return Ok(result);
+
+            return Ok(new ServiceResponse<IReadOnlyCollection<GetAccountDto>> { Data = result });
         }
 
         [Authorize(Policy = "AccessForLogClient")]
@@ -46,8 +63,16 @@ namespace Project.Controllers
 
         [Authorize(Policy = "AccessForLogClient")]
         [HttpPost("Transfer")]
-        public async Task<ActionResult<ServiceResponse<string>>> Transfer(TransferCommand command)
+        public async Task<ActionResult<ServiceResponse<string>>> Transfer(TransferDto transfer)
         {
+            System.Security.Claims.ClaimsIdentity id = User.Identities.First();
+            var command = new TransferCommand
+            {
+                AccountReceiver = transfer.AccountReceiver,
+                AccountSender = transfer.AccountSender,
+                Amount = transfer.Amount,
+                ClientId = Convert.ToInt32(id.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value)
+            };
             var result = await _mediator.Send(command);
             return Ok(result);
         }

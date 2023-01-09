@@ -16,8 +16,8 @@ namespace Project.Infrastructure.Functions.Command
             var response = new ServiceResponse<bool>();
             var entity = new Models.Client.ClientAccount
             {
-                ClientId = request.clientId,
-                AccountId = request.accountId
+                ClientId = request.ClientId,
+                AccountId = request.AccountId
             };
             response.Data = await _unitOfWork.ClientAccountRepository.Add(entity);
             return response;

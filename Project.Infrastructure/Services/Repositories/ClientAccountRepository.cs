@@ -31,5 +31,11 @@ namespace Project.Infrastructure.Services.Repositories
             return false;
         }
 
+        public async Task<ICollection<ClientAccount>> GetAllAccountUsers (int accountId)
+        {
+            var dbData = await _dataContext.ClientAccount.Where(ac => ac.AccountId == accountId).ToListAsync();
+            return dbData;
+        }
+
     }
 }

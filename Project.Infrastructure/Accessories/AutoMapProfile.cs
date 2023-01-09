@@ -11,6 +11,7 @@ namespace Project.Infrastructure.Accessories
         { 
             CreateMap<Client?,GetClientDto>();
             CreateMap<Address?,GetAddressDto>();
+            CreateMap<Account?,GetAccountDto>();
 
             CreateMap<IReadOnlyCollection<Account>?, IReadOnlyCollection<GetAccountDto>>();
         }
